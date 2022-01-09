@@ -1,7 +1,9 @@
 from yt_pj.pipeline.steps.get_video_list import GetVideoList
+from yt_pj.pipeline.steps.download_caption import DownloadCaption
 from yt_pj.pipeline.pipeline import Pipeline
+from pytube import YouTube
 
-CHANNEL_ID = 'UCQq36RYp2AKIftKhQGXElXA'
+CHANNEL_ID = 'UC-ZMWGgdNaiRcKXyRHdl_bg'
 
 
 def main():
@@ -11,6 +13,7 @@ def main():
 
     steps = [
         GetVideoList(),
+        DownloadCaption(),
     ]
 
     p = Pipeline(steps)
@@ -20,42 +23,9 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-# yt = pytube.YouTube('https://www.youtube.com/watch?v=8jo0ojNgpR8')
-# yt_caption = yt.captions['a.en']
-# print(yt_caption.xml_captions)
-# S = yt_caption.xml_captions.splitlines()
 #
-# newlines = []
-# memoryword = ''
-# memorytime = ''
-#
-# for line in S:
-#     for word in line:
-#         if word == '<':
-#             do_type = 'get_time'
-#             memoryword += ' '
-#         elif word == '>':
-#             do_type = 'get_word'
-#
-#         else:
-#             if do_type == 'get_time':
-#                 if word == ' ':
-#                     for firstword in memorytime:
-#                         if firstword == 't':
-#                             memoryword += memorytime
-#                         else:
-#                             memorytime = ''
-#                 else:
-#                     memorytime += word
-#                 # continue
-#             elif do_type == 'get_word':
-#                 memoryword += word
-#
-# newlines = memoryword.split()
-# for line in newlines:
-#     print(line)
-
-
-# url_list = get_all_video_in_channel(CHANALL_ID, API_KEY)
-# API_KEY_Y=AIzaSyBe3oxJ0moiKlBC965J3S42eotO_dZlz60
+# sourse = YouTube('https://www.youtube.com/watch?v=IRyJe-0Uie0')
+# code = (sourse.captions.lang_code_index).keys().__iter__().__next__()
+# en_caption = sourse.captions[code]
+# en_str = en_caption.generate_srt_captions()
+# print(en_str)
