@@ -22,12 +22,9 @@ class Utils:
         os.makedirs(VIDEOS_DIR, exist_ok=True)
 
     @staticmethod
-    def check_caption_exist(captions):  # 檢查是否有字幕可以下載
-        try:
-            caption_lan = captions.lang_code_index.keys().__iter__().__next__()
-        except StopIteration:
-            return 'False'  # 沒有字幕回傳'False'
-        return caption_lan
+    def check_caption_exist(captions):  # search caption_code 無使用
+        caption_code = captions.lang_code_index.keys().__iter__().__next__()
+        return caption_code
 
     @staticmethod
     def get_video_list_path(channel_id):
