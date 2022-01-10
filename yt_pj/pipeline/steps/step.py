@@ -7,7 +7,7 @@ class Step(ABC):  # 抽象類別 至少要有1個或以上的abstractmethod
         pass
 
     @abstractmethod
-    def process(self, data, inputs):  # 處理
+    def process(self, data, inputs, utils):  # 處理
         pass
 
 
