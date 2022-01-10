@@ -10,6 +10,10 @@ from yt_pj.setting import API_KEY
 class GetVideoList(Step):
     def process(self, data, inputs, utils):
         channel_id = inputs['channel_id']
+        if utils.video_list_exist(channel_id):
+            print('自檔案讀取video_list')
+            return utils.read_video_list(channel_id)
+
         base_video_url = 'https://www.youtube.com/watch?v='
         base_search_url = 'https://www.googleapis.com/youtube/v3/search?'
 
@@ -17,7 +21,7 @@ class GetVideoList(Step):
 
         video_links = []
         url = first_url
-
+        print('開始使用api')
         while True:
             inp = urlrq.urlopen(url, context=ssl.create_default_context(cafile=certifi.where()))
             resp = json.load(inp)
@@ -31,5 +35,6 @@ class GetVideoList(Step):
                 url = first_url + '&pageToken={}'.format(next_page_token)
             except KeyError:
                 break
-        print(video_links)
+        print('使用api取得videolist')
+        utils.write_video_list(video_links, channel_id)
         return video_links
