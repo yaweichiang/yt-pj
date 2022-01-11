@@ -20,4 +20,15 @@ class YT:
         return os.path.join(CAPTIONS_DIR, self.id + '.txt')
 
     def get_video_path(self):
-        return os.path.join(VIDEOS_DIR, self.id)
+        return os.path.join(VIDEOS_DIR, self.id + '.mp4')
+
+    def __str__(self):  #簡易# 說明
+        return f'YT_{self.id}'
+
+    def __repr__(self):  #詳細說明
+        info = ' ; '.join([
+            'id=' + str(self.id),
+            'url=' + str(self.url),
+            ])
+
+        return f'<YT({info})>'

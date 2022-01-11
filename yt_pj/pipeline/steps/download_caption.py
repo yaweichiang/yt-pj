@@ -6,7 +6,7 @@ class DownloadCaption(Step):
     def process(self, data, inputs, utils):
         print('下載字幕')
         for yt in data:
-            if utils.captions_exist(yt.caption_path):
+            if utils.captions_exist(yt):
                 continue
             sourse = YouTube(yt.url)
             try:  # 只抓取a.en字幕,跳過無字幕及非a.en字幕的影片

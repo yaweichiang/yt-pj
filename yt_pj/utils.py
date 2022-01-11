@@ -9,8 +9,6 @@ class Utils:
     def __init__(self):
         pass
 
-
-
     @staticmethod
     def create_dir():
         os.makedirs(DOWNLOADS_DIR, exist_ok=True)
@@ -22,11 +20,11 @@ class Utils:
         caption_code = captions.lang_code_index.keys().__iter__().__next__()
         return caption_code
 
-
-
-
     def captions_exist(self, yt):
         path = yt.caption_path
         return os.path.exists(path) and os.path.getsize(path) > 0
 
+    def video_exist(self, yt):
+        path = yt.video_path
+        return os.path.exists(path) and os.path.getsize(path) > 0
 
