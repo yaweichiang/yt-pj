@@ -3,6 +3,7 @@ import os
 from yt_pj.pipeline.steps.get_video_list import GetVideoList
 from yt_pj.pipeline.steps.download_caption import DownloadCaption
 from yt_pj.pipeline.steps.read_caption import ReadCaption
+from yt_pj.pipeline.steps.search import Search
 from yt_pj.pipeline.pipeline import Pipeline
 from yt_pj.utils import Utils
 from yt_pj.pipeline.steps.preflight import Preflight
@@ -22,16 +23,21 @@ def main():
         Preflight(),
         GetVideoList(),
         DownloadCaption(),
-          ReadCaption(),
+        ReadCaption(),
+        Search(),
         Postflight(),
     ]
 
     utils = Utils()
 
-    R = ReadCaption()
-    R.process(os.listdir(CAPTIONS_DIR), inputs, utils)
-    # p = Pipeline(steps)
-    # p.run(inputs, utils)
+    p = Pipeline(steps)
+    p.run(inputs, utils)
+
+    # R = ReadCaption()
+    # data = R.process(os.listdir(CAPTIONS_DIR), inputs, utils)
+    # S = Search()
+    # S.process(data, inputs, utils)
+
 
 
 

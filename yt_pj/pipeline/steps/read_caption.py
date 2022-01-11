@@ -24,5 +24,6 @@ class ReadCaption(Step):
                     pass
             datas[captionfile.split('.txt')[0]] = captions
 
-        print(datas)
+
+        return datas
 
