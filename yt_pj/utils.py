@@ -27,25 +27,25 @@ class Utils:
         return caption_code
 
     @staticmethod
-    def get_video_list_path(channel_id):
+    def get_video_lists_path(channel_id):
         return os.path.join(DOWNLOADS_DIR, channel_id + '.txt')
 
-    def write_video_list(self, video_list, channel_id):
-        with open(self.get_video_list_path(channel_id), 'w', encoding='utf-8') as f:
+    def write_video_lists(self, video_list, channel_id):
+        with open(self.get_video_lists_path(channel_id), 'w', encoding='utf-8') as f:
             for url in video_list:
                 f.write(url + '\n')
 
-    def video_list_exist(self, channel_id):  # 檢查videolist是否存在
-        path = self.get_video_list_path(channel_id)
+    def video_lists_exist(self, channel_id):  # 檢查videolist是否存在
+        path = self.get_video_lists_path(channel_id)
         return os.path.exists(path) and os.path.getsize(path) > 0
 
-    def read_video_list(self, channel_id):
-        with open(self.get_video_list_path(channel_id), 'r', encoding='utf-8') as f:
+    def read_video_lists(self, channel_id):
+        with open(self.get_video_lists_path(channel_id), 'r', encoding='utf-8') as f:
             video_link = []
             for url in f:
                 video_link.append(url.strip())
         return video_link
 
-    def captions_exsit(self, url):
+    def captions_exist(self, url):
         path = self.get_caption_path(url)
         return os.path.exists(path) and os.path.getsize(path) > 0

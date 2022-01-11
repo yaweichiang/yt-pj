@@ -1,6 +1,7 @@
+import os
 from pytube import YouTube
 from .step import Step
-
+from yt_pj.setting import CAPTIONS_DIR
 
 def _loadcaptions(sourse, caption_code):
     en_caption = sourse.captions[caption_code]
@@ -17,8 +18,8 @@ def _savecaptions(captions, url):
 class DownloadCaption(Step):
     def process(self, data, inputs, utils):
         for url in data:
-            if utils.captions_exsit(url):
-                print(f'字幕檔已存在({utils.get_video_id(url)})')
+            if utils.captions_exist(url):
+                # print(f'字幕檔已存在({utils.get_video_id(url)})')
                 continue
             sourse = YouTube(url)
             # caption_code = utils.check_caption_exist(sourse.captions)
@@ -26,19 +27,19 @@ class DownloadCaption(Step):
             #     print(f'無字幕可下載({utils.get_video_id(url)})')
             #     continue
             # else:
-          # 只抓取a.en字幕,跳過無字幕及非a.en字幕的影片
-            try:
+
+            try:  # 只抓取a.en字幕,跳過無字幕及非a.en字幕的影片
                 captions = _loadcaptions(sourse, 'a.en')
             except KeyError:
-                print('KeyError:', url)
+                # print('KeyError:', url)
                 continue
             except AttributeError:
-                print('AttributeError:', url)
+                # print('AttributeError:', url)
                 continue
 
                 # try:
                 #     print('沒有[a.en]字幕,搜尋caption_code')
-                #     caption_code = utils.captions_exsit(sourse.captions)
+                #     caption_code = utils.captions_exist(sourse.captions)
                 # except:
                 #     print('沒有字幕')
                 #     continue
@@ -46,4 +47,4 @@ class DownloadCaption(Step):
             save_url = utils.get_caption_path(url)
 
             _savecaptions(captions, save_url)
-        return
+        return os.listdir(CAPTIONS_DIR)
