@@ -22,10 +22,10 @@ class YT:
     def get_video_path(self):
         return os.path.join(VIDEOS_DIR, self.id + '.mp4')
 
-    def __str__(self):  #簡易# 說明
+    def __str__(self):  # 簡易# 說明
         return f'YT_{self.id}'
 
-    def __repr__(self):  #詳細說明
+    def __repr__(self):  # 詳細說明
         info = ' ; '.join([
             'id=' + str(self.id),
             'url=' + str(self.url),
