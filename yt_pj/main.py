@@ -27,11 +27,11 @@ def main():
         GetVideoList(),
         CreateYT(),
         DownloadCaption(),
-        ReadCaption(),
-        Search(),
-        DownloadVideos(),
-        EditVideo(),
-        Postflight(),
+        # ReadCaption(),
+        # Search(),
+        # DownloadVideos(),
+        # EditVideo(),
+        # Postflight(),
     ]
 
     utils = Utils()
