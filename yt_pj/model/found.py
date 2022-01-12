@@ -15,10 +15,10 @@ class Found():
     def get_end_time(self):
         return self.time.split(' --> ')[-1]
 
-    def __str__(self):  #簡易說明
+    def __str__(self):  # 簡易說明
         return f'<Found_{self.yt}>'
 
-    def __repr__(self):  #詳細說明
+    def __repr__(self):  # 詳細說明
         info = ' ; '.join([
             'yt=' + str(self.yt),
             'caption=' + str(self.caption),
