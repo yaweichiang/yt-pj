@@ -3,6 +3,7 @@ from yt_pj.setting import CAPTIONS_DIR
 from yt_pj.setting import DOWNLOADS_DIR
 from yt_pj.setting import VIDEOS_DIR
 from yt_pj.setting import OUTPUTS_DIR
+from pytube import YouTube
 
 
 class Utils:
@@ -17,14 +18,18 @@ class Utils:
         os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
     @staticmethod
-    def check_caption_exist(captions):  # search caption_code 無使用
-        caption_code = captions.lang_code_index.keys().__iter__().__next__()
-        return caption_code
+    def get_caption_language(url):  # search caption_code 無使用
+        yt = YouTube(url)
+        try:
+            caption_language = yt.captions.lang_code_index.keys().__iter__().__next__()
+        except StopIteration:
+            return None
+        return caption_language
 
     @staticmethod
     def captions_exist(yt):
         path = yt.caption_path
-        return os.path.exists(path) and os.path.getsize(path) > 0
+        return (os.path.exists(path) and os.path.getsize(path) > 0)
 
     @staticmethod
     def video_exist(yt):

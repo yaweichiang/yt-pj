@@ -1,10 +1,13 @@
+
 from yt_pj.pipeline.steps.step import Step
 from yt_pj.model.found import Found
+
 
 
 class Search(Step):
     def process(self, data, inputs, utils):
         print('搜尋字幕')
+        # start_time = time.time()
         found = []
         for yt in data:
             if not utils.captions_exist(yt):
@@ -15,6 +18,8 @@ class Search(Step):
                     time = captions[caption]
                     f = Found(yt, caption, time)
                     found.append(f)
+        # end_time = time()
+        # pront(start_time-end_time)
         return found
 
 

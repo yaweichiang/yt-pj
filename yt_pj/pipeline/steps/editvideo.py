@@ -1,5 +1,6 @@
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from yt_pj.pipeline.steps.step import Step
+from concurrent.futures import ProcessPoolExecutor, as_completed, ThreadPoolExecutor
 
 
 class EditVideo(Step):
@@ -20,9 +21,10 @@ class EditVideo(Step):
             videos.append(video)
             if len(videos) == inputs['limit']:
                 break
-
+        print(type(videos))
         clips = concatenate_videoclips(videos)
         clips.write_videofile(utils.get_outputs_path(inputs), audio_codec='aac')
+
         return cutfounds
 
     @staticmethod

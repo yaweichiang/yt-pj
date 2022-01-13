@@ -19,7 +19,8 @@ def main():
     inputs = {
         'channel_id': CHANNEL_ID,
         'search_word': SEARCH_WORD,
-        'limit': 40
+        'limit': 40,
+
     }
 
     steps = [
@@ -27,10 +28,10 @@ def main():
         GetVideoList(),
         CreateYT(),
         DownloadCaption(),
-        # ReadCaption(),
-        # Search(),
-        # DownloadVideos(),
-        # EditVideo(),
+        ReadCaption(),
+        Search(),
+        DownloadVideos(),
+        EditVideo(),
         # Postflight(),
     ]
 

@@ -4,6 +4,7 @@ from yt_pj.setting import CAPTIONS_DIR
 from yt_pj.setting import VIDEOS_DIR
 
 
+
 class YT:
     def __init__(self, url, channel_id):
         self.url = url
@@ -12,6 +13,7 @@ class YT:
         self.caption_path = self.get_caption_path()
         self.video_path = self.get_video_path()
         self.captions = None
+        # self.caption_language
 
     def get_video_id(self):
         return self.url.split('watch?v=')[-1]
