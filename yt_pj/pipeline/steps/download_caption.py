@@ -28,4 +28,3 @@ class DownloadCaption(Step):  # multi-threading1
             for line in captions:
                 file.write(line)
         return
-

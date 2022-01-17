@@ -1,4 +1,3 @@
-import logging
 from yt_pj.pipeline.steps.step import Step
 
 

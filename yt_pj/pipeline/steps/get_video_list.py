@@ -1,5 +1,4 @@
 import os
-from time import time
 import urllib.request as urlrq
 import ssl
 import json
@@ -63,4 +62,3 @@ class GetVideoList(Step):
             for url in f:
                 video_link.append(url.strip())
         return video_link
-

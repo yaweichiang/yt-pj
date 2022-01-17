@@ -1,4 +1,5 @@
 import os
+import shutil
 from yt_pj.setting import CAPTIONS_DIR
 from yt_pj.setting import DOWNLOADS_DIR
 from yt_pj.setting import VIDEOS_DIR
@@ -11,12 +12,15 @@ class Utils:
         pass
 
     @staticmethod
+    def delete_dir():
+        shutil.rmtree(DOWNLOADS_DIR, ignore_errors=True)
+
+    @staticmethod
     def create_dir():
         os.makedirs(DOWNLOADS_DIR, exist_ok=True)
         os.makedirs(CAPTIONS_DIR, exist_ok=True)
         os.makedirs(VIDEOS_DIR, exist_ok=True)
         os.makedirs(OUTPUTS_DIR, exist_ok=True)
-
 
     @staticmethod
     def get_caption_language(url):  # search caption_code 無使用
@@ -30,7 +34,7 @@ class Utils:
     @staticmethod
     def captions_exist(yt):
         path = yt.caption_path
-        return (os.path.exists(path) and os.path.getsize(path) > 0)
+        return os.path.exists(path) and os.path.getsize(path) > 0
 
     @staticmethod
     def video_exist(yt):
@@ -45,7 +49,3 @@ class Utils:
     def outputs_exist(self, inputs):
         path = self.get_outputs_path(inputs)
         return os.path.exists(path) and os.path.getsize(path) > 0
-
-
-
-

@@ -14,9 +14,8 @@ class Pipeline:
                 start = time()
                 data = step.process(data, inputs, utils)
                 end = time()
-                logging.getLogger('log').info(f'{step.__module__.split("yt_pj.pipeline.steps.")[-1]}執行時間： {end - start}')
+                logging.getLogger('log').info(f'{step.__module__.split("yt_pj.pipeline.steps.")[-1]}'
+                                              f'執行時間： {end - start}')
             except StepException as e:
                 logging.getLogger('log').error('Exception happened :', e)
                 break
-
-

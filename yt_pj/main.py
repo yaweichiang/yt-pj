@@ -13,9 +13,6 @@ from yt_pj.pipeline.steps.editvideo import EditVideo
 from yt_pj.pipeline.steps.postflight import Postflight
 from yt_pj.utils import Utils
 
-CHANNEL_ID = 'UCgc00bfF_PvO_2AvqJZHXFg'
-SEARCH_WORD = 'can'
-
 
 def gethelper():
     print('{:<6} {:<12},{}'.format('-h', '--helper', '取得使用說明'))
@@ -24,8 +21,8 @@ def gethelper():
     print('{:<6} {:<12},{}'.format('-l', '--limit', '-l <剪輯片段數量> ,此參數須為正整數 預設值為20'))
     print('{:<6} {:<12},{}'.format('f', '--fast', '--fast 程式在下載時會先確認使否已有預下載之檔案,若有將直接跳過該檔案,預設值為False'))
     print('{:<6} {:<12},{}'.format('', '--cleanup', '--cleanup 程式結束後會清除下載的資料,預設值為False'))
-    print('{:<6} {:<12},{}'.format('', '--sloglev', '--sloglev <stream handler level> ,預設值為全部顯示,可設定為debug,info,'
-                                                     'warning,error,crittcal五個等級'))
+    print('{:<6} {:<12},{}'.format('', '--sloglev', '--sloglev <stream handler level> ,預設值為全部顯示'
+                                                    ',可設定為debug,info,warning,error,crittcal五個等級'))
 
 
 def set_logger(lev):
@@ -42,9 +39,7 @@ def set_logger(lev):
     logger.addHandler(stream_handler)
 
 
-
 def main(argv):
-
     inputs = {
         'channel_id': None,
         'search_word': None,
@@ -55,7 +50,8 @@ def main(argv):
     }
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hfc:s:l:", ["help", "fast", "cleanup", "channel=", "search=", "limit=", "sloglev="])
+        opts, args = getopt.getopt(argv[1:], "hfc:s:l:", ["help", "fast", "cleanup", "channel=", "search=", "limit=",
+                                                          "sloglev="])
     except getopt.GetoptError:
         gethelper()
         sys.exit(2)
@@ -122,14 +118,12 @@ def main(argv):
         Postflight(),
     ]
 
-
     utils = Utils()
     p = Pipeline(steps)
     if utils.outputs_exist(inputs) and inputs['fast']:
         logger.warning('相同設定值檔案已存在')
     else:
         p.run(inputs, utils)
-
 
 
 if __name__ == '__main__':
