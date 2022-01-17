@@ -1,9 +1,10 @@
 import os
+from time import time
 import urllib.request as urlrq
 import ssl
 import json
 import certifi
-
+import logging
 from yt_pj.setting import DOWNLOADS_DIR
 from yt_pj.pipeline.steps.step import Step
 from yt_pj.setting import API_KEY
@@ -12,9 +13,11 @@ from yt_pj.setting import API_KEY
 class GetVideoList(Step):
     def process(self, data, inputs, utils):
         channel_id = inputs['channel_id']
-        if self.video_lists_exist(channel_id):
-            print('自檔案讀取video_list')
-            return self.read_video_lists(channel_id)
+
+        if inputs['fast'] is True:
+            if self.video_lists_exist(channel_id):
+                logging.getLogger('log').info('自檔案讀取video_list')
+                return self.read_video_lists(channel_id)
 
         base_video_url = 'https://www.youtube.com/watch?v='
         base_search_url = 'https://www.googleapis.com/youtube/v3/search?'
@@ -23,7 +26,7 @@ class GetVideoList(Step):
 
         video_links = []
         url = first_url
-        print('開始使用api')
+        logging.getLogger('log').info('開始使用api')
         while True:
             inp = urlrq.urlopen(url, context=ssl.create_default_context(cafile=certifi.where()))
             resp = json.load(inp)
@@ -37,7 +40,7 @@ class GetVideoList(Step):
                 url = first_url + '&pageToken={}'.format(next_page_token)
             except KeyError:
                 break
-        print('使用api取得videolist')
+        logging.getLogger('log').info('使用api取得videolist')
         self.write_video_lists(video_links, channel_id)
         return video_links
 
@@ -60,3 +63,4 @@ class GetVideoList(Step):
             for url in f:
                 video_link.append(url.strip())
         return video_link
+

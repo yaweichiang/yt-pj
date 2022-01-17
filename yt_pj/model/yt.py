@@ -2,6 +2,7 @@
 import os
 from yt_pj.setting import CAPTIONS_DIR
 from yt_pj.setting import VIDEOS_DIR
+from pytube import YouTube
 
 
 
@@ -13,7 +14,7 @@ class YT:
         self.caption_path = self.get_caption_path()
         self.video_path = self.get_video_path()
         self.captions = None
-        # self.caption_language
+        # self.caption_language = self.get_video_language()
 
     def get_video_id(self):
         return self.url.split('watch?v=')[-1]
@@ -34,3 +35,10 @@ class YT:
             ])
 
         return f'<YT({info})>'
+
+    # def get_video_language(self):
+    #     try:
+    #         video_lang = YouTube(self.url).captions.lang_code_index.keys().__iter__().__next__()
+    #     except AttributeError:
+    #         video_lang = None
+    #     return video_lang

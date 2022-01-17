@@ -1,5 +1,6 @@
 import getopt
 import sys
+import logging
 from yt_pj.pipeline.pipeline import Pipeline
 from yt_pj.pipeline.steps.preflight import Preflight
 from yt_pj.pipeline.steps.get_video_list import GetVideoList
@@ -18,31 +19,70 @@ SEARCH_WORD = 'can'
 
 def gethelper():
     print('{:<6} {:<12},{}'.format('-h', '--helper', '取得使用說明'))
-    print('{:<6} {:<12},{}'.format('-c', '-channel', '-c Youtube channel id 或 --channel <Youtube channel id> ,此參數必填'))
-    print('{:<6} {:<12},{}'.format('-s', '--search', '-s 要搜尋的詞彙 ,此參數必填'))
-    print('{:<6} {:<12},{}'.format('-l', '--limit', '-l 要剪輯的影片數 ,此參數須為正整數 預設值為20'))
-    print('{:<6} {:<12},{}'.format('', '--cleanup', '輸入--cleanup 程式結束後會清除下載的資料 未輸入此值會保留下載資料'))
+    print('{:<6} {:<12},{}'.format('-c', '-channel', '-c <Youtube channel id> 或 --channel <Youtube channel id>'))
+    print('{:<6} {:<12},{}'.format('-s', '--search', '-s <要搜尋的詞彙>'))
+    print('{:<6} {:<12},{}'.format('-l', '--limit', '-l <剪輯片段數量> ,此參數須為正整數 預設值為20'))
+    print('{:<6} {:<12},{}'.format('f', '--fast', '--fast 程式在下載時會先確認使否已有預下載之檔案,若有將直接跳過該檔案,預設值為False'))
+    print('{:<6} {:<12},{}'.format('', '--cleanup', '--cleanup 程式結束後會清除下載的資料,預設值為False'))
+    print('{:<6} {:<12},{}'.format('', '--sloglev', '--sloglev <stream handler level> ,預設值為全部顯示,可設定為debug,info,'
+                                                     'warning,error,crittcal五個等級'))
+
+
+def set_logger(lev):
+    logger = logging.getLogger('log')
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
+    file_handler = logging.FileHandler('log.log')
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(lev)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
 
 
 def main(argv):
+
     inputs = {
         'channel_id': None,
         'search_word': None,
         'limit': 20,
-        'cleanup': False
-
+        'cleanup': False,
+        'fast': False,
+        'sloglev': logging.WARNING
     }
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hc:s:l:", ["help", "cleanup", "channel=", "search=", "limit="])
+        opts, args = getopt.getopt(argv[1:], "hfc:s:l:", ["help", "fast", "cleanup", "channel=", "search=", "limit=", "sloglev="])
     except getopt.GetoptError:
         gethelper()
         sys.exit(2)
-    print(opts)
     for opt, arg in opts:
-        if opt in ('-h', '--help'):
+        if opt == '--sloglev':
+            if arg == 'debug':
+                inputs['sloglev'] = logging.DEBUG
+            elif arg == 'info':
+                inputs['sloglev'] = logging.INFO
+            elif arg == 'warning':
+                inputs['sloglev'] = logging.WARNING
+            elif arg == 'error':
+                inputs['sloglev'] = logging.ERROR
+            elif arg == 'crittcal':
+                inputs['sloglev'] = logging.CRITICAL
+        else:
+            continue
+    set_logger(inputs['sloglev'])
+    logger = logging.getLogger('log')
+    for opt, arg in opts:
+        if opt == '--sloglev':
+            continue
+        elif opt in ('-h', '--help'):
             gethelper()
             sys.exit(0)
+        elif opt == '--fast':
+            inputs['fast'] = True
         elif opt == '--cleanup':
             inputs['cleanup'] = True
         elif opt in ('-c', '--channel'):
@@ -53,20 +93,22 @@ def main(argv):
             try:
                 arg = int(arg)
             except ValueError:
-                print('limit參數須為正整數')
+                logger.error('limit參數須為正整數')
                 gethelper()
                 sys.exit(2)
             if arg <= 0:
-                print('limit參數須為正整數')
+                logger.error('limit參數須為正整數')
                 gethelper()
                 sys.exit(2)
             inputs['limit'] = arg
 
+    logger = logging.getLogger('log')
+
     if None in (inputs['channel_id'], inputs['search_word']):
-        print('有必填參數未輸入')
+        logger.error('頻道ID以及要搜尋的詞彙是必填參數')
         gethelper()
         sys.exit(2)
-    print(f'開始執行。頻道:{inputs["channel_id"]},查詢詞彙:{inputs["search_word"]}')
+    logger.info(f'開始執行。頻道:{inputs["channel_id"]},查詢詞彙:{inputs["search_word"]}')
 
     steps = [
         Preflight(),
@@ -80,10 +122,14 @@ def main(argv):
         Postflight(),
     ]
 
-    utils = Utils()
 
+    utils = Utils()
     p = Pipeline(steps)
-    p.run(inputs, utils)
+    if utils.outputs_exist(inputs) and inputs['fast']:
+        logger.warning('相同設定值檔案已存在')
+    else:
+        p.run(inputs, utils)
+
 
 
 if __name__ == '__main__':

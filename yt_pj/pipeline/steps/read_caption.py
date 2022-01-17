@@ -1,12 +1,9 @@
+import logging
 from yt_pj.pipeline.steps.step import Step
-
-from time import time
 
 
 class ReadCaption(Step):
     def process(self, data, inputs, utils):
-        print('讀取字幕')
-        start_time = time()
         for yt in data:
             if not utils.captions_exist(yt):
                 continue
@@ -22,6 +19,4 @@ class ReadCaption(Step):
                         captions[line.strip()] = temp_time
                     line_counting += 1
                 yt.captions = captions
-        end_time = time()
-        print(end_time-start_time)
         return data

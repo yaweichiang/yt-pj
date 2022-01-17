@@ -17,6 +17,7 @@ class Utils:
         os.makedirs(VIDEOS_DIR, exist_ok=True)
         os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
+
     @staticmethod
     def get_caption_language(url):  # search caption_code 無使用
         yt = YouTube(url)
@@ -38,5 +39,13 @@ class Utils:
 
     @staticmethod
     def get_outputs_path(inputs):
-        filename = f'{inputs["channel_id"]}_{inputs["search_word"]}.mp4'
+        filename = f'{inputs["channel_id"]}_{inputs["search_word"]}_{inputs["limit"]}.mp4'
         return os.path.join(OUTPUTS_DIR, filename)
+
+    def outputs_exist(self, inputs):
+        path = self.get_outputs_path(inputs)
+        return os.path.exists(path) and os.path.getsize(path) > 0
+
+
+
+
